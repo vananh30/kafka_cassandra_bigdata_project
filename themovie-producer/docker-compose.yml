@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  binance:
+    container_name: wikipedia
+    build: .
+    environment:
+      KAFKA_BROKER_URL: broker:9092
+      TOPIC_NAME: wikipedia
+      SLEEP_TIME: 60
+
+networks:
+  default:
+    external:
+      name: kafka-network

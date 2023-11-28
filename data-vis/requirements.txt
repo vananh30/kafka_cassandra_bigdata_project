@@ -1,0 +1,9 @@
+pandas
+seaborn
+numpy
+matplotlib
+jupyter
+cassandra-driver
+jupyterlab
+plotly
+sklearn

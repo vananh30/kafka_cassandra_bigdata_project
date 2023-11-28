@@ -1,0 +1,39 @@
+version: "3"
+
+services:
+  weatherconsumer:
+    container_name: weatherconsumer
+    image: consumer
+    build: .
+    environment:
+      KAFKA_BROKER_URL: broker:9092
+      TOPIC_NAME: weather
+      SINK_TOPIC_NAME: weathersink
+      CASSANDRA_HOST: cassandradb
+      CASSANDRA_KEYSPACE: kafkapipeline
+    command: ["python", "-u", "python/weather_consumer.py"]
+  fakerconsumer:
+    container_name: fakerconsumer
+    image: consumer
+    environment:
+      KAFKA_BROKER_URL: broker:9092
+      TOPIC_NAME: faker
+      SINK_TOPIC_NAME: fakersink
+      CASSANDRA_HOST: cassandradb
+      CASSANDRA_KEYSPACE: kafkapipeline
+    command: ["python", "-u", "python/faker_consumer.py"]
+  binanceconsumer:
+    container_name: binanceconsumer
+    image: consumer
+    environment:
+      KAFKA_BROKER_URL: broker:9092
+      TOPIC_NAME: binance
+      SINK_TOPIC_NAME: binancesink
+      CASSANDRA_HOST: cassandradb
+      CASSANDRA_KEYSPACE: kafkapipeline
+    command: ["python", "-u", "python/binance_consumer.py"]
+
+networks:
+  default:
+    external:
+      name: kafka-network
