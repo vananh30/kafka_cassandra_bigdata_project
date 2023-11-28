@@ -22,16 +22,16 @@ services:
       CASSANDRA_HOST: cassandradb
       CASSANDRA_KEYSPACE: kafkapipeline
     command: ["python", "-u", "python/faker_consumer.py"]
-  binanceconsumer:
-    container_name: binanceconsumer
+  wikipediaconsumer:
+    container_name: wikipediaconsumer
     image: consumer
     environment:
       KAFKA_BROKER_URL: broker:9092
-      TOPIC_NAME: binance
-      SINK_TOPIC_NAME: binancesink
+      TOPIC_NAME: wikipedia
+      SINK_TOPIC_NAME: wikipediasink
       CASSANDRA_HOST: cassandradb
       CASSANDRA_KEYSPACE: kafkapipeline
-    command: ["python", "-u", "python/binance_consumer.py"]
+    command: ["python", "-u", "python/wikipedia_consumer.py"]
 
 networks:
   default:

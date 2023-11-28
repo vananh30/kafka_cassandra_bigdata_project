@@ -36,16 +36,16 @@ curl -s \
     "topics": "faker",
     "contactPoints": "cassandradb",
     "loadBalancing.localDc": "datacenter1",
-    "topic.faker.kafkapipeline.fakerdata.mapping": "username=value.username, name=value.name, email=value.email, phone_number=value.phone_number, address=value.address, company=value.company, job=value.job, license_plate=value.license_plate, year=value.year, safe_color_name=value.safe_color_name",
+    "topic.faker.kafkapipeline.fakerdata.mapping": "name=value.name, gender=value.gender, address=value.address, year=value.year, email=value.email, phone_number=value.phone_number, job=value.job, company=value.company, country=value.country, city=value.city, date_time=value.date_time, credit_card_number=value.credit_card_number",
     "topic.faker.kafkapipeline.fakerdata.consistencyLevel": "LOCAL_QUORUM"
   }
 }'
-echo "Starting Binance Sink"
+echo "Starting Wikipedia Sink"
 curl -s \
      -X POST http://localhost:8083/connectors \
      -H "Content-Type: application/json" \
      -d '{
-  "name": "binancesink",
+  "name": "wikipediasink",
   "config": {
     "connector.class": "com.datastax.oss.kafka.sink.CassandraSinkConnector",
     "value.converter": "org.apache.kafka.connect.json.JsonConverter",
@@ -53,11 +53,11 @@ curl -s \
     "key.converter": "org.apache.kafka.connect.json.JsonConverter",
     "key.converter.schemas.enable":"false",
     "tasks.max": "10",
-    "topics": "binance",
+    "topics": "wikipedia",
     "contactPoints": "cassandradb",
     "loadBalancing.localDc": "datacenter1",
-    "topic.binance.kafkapipeline.binancedata.mapping": "datetime=value.datetime, pair=value.pair, open_price=value.open_price, close_price=value.close_price, high_price=value.high_price, low_price=value.low_price, volume=value.volume, trades=value.trades",
-    "topic.binance.kafkapipeline.binancedata.consistencyLevel": "LOCAL_QUORUM"
+    "topic.wikipedia.kafkapipeline.wikipediadata.mapping": "id=value.id, type=value.type, title=value.title, timestamp=value.timestamp, user=value.user, bot=value.bot, length_old=value.length_old, length_new=value.length_new, revision_old=value.revision_old, revision_new=value.revision_new",
+    "topic.wikipedia.kafkapipeline.wikipediadata.consistencyLevel": "LOCAL_QUORUM"
   }
 }'
 echo "Done."

@@ -6,4 +6,4 @@ ADD ./requirements.txt ./
 RUN pip install -r requirements.txt
 ADD ./ ./
 
-CMD ["python3", "-u", "binance_producer.py"]
+CMD ["python3", "-u", "wikipedia_producer.py"]

@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  binance:
+  wikipedia:
     container_name: wikipedia
     build: .
     environment:

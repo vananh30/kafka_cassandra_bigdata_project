@@ -31,8 +31,8 @@ CREATE TABLE fakerdata (
 );
 
 
-CREATE TABLE wikipedia (
-    id INT,
+CREATE TABLE wikipediadata (
+    id BIGINT,
     type TEXT,
     title TEXT,
     timestamp TIMESTAMP,

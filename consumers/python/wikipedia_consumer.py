@@ -4,7 +4,7 @@ import os
 import json
 
 if __name__ == "__main__":
-    print("Starting Binance Data Consumer")
+    print("Starting Wikipedia Data Consumer")
     TOPIC_NAME = os.environ.get("TOPIC_NAME", "")
     KAFKA_BROKER_URL = os.environ.get("KAFKA_BROKER_URL", "localhost:9092")
     CASSANDRA_HOST = os.environ.get("CASSANDRA_HOST", "localhost")
