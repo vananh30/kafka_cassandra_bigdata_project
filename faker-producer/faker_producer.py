@@ -19,7 +19,7 @@ def get_registered_user():
         "company": fake.company(),
         "country": fake.country(),
         "city": fake.city(),
-        "date_time": fake.date_time(),
+        "date_time": fake.date_time().strftime('%Y-%m-%d %H:%M:%S'),
         "credit_card_number": fake.credit_card_number(),
     }
 

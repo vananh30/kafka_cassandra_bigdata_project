@@ -10,7 +10,7 @@ from cassandra.query import dict_factory
 
 weathertable = os.getenv("weather.table", "weatherreport")
 fakertable = os.getenv("faker.table", "fakerdata")
-binancetable = os.getenv("binance.table", "binancedata")
+binancetable = os.getenv("wikipedia.table", "wikipediadata")
 
 
 CASSANDRA_HOST = os.environ.get("CASSANDRA_HOST") if os.environ.get("CASSANDRA_HOST") else 'localhost'
@@ -18,7 +18,7 @@ CASSANDRA_KEYSPACE = os.environ.get("CASSANDRA_KEYSPACE") if os.environ.get("CAS
 
 WEATHER_TABLE = os.environ.get("WEATHER_TABLE") if os.environ.get("WEATHER_TABLE") else 'weather'
 FAKER_TABLE = os.environ.get("FAKER_TABLE") if os.environ.get("FAKER_TABLE") else 'faker'
-BINANCE_TABLE = os.environ.get("BINANCE_TABLE") if os.environ.get("BINANCE_TABLE") else 'binance'
+BINANCE_TABLE = os.environ.get("WIKIPEDIA_TABLE") if os.environ.get("WIKIPEDIA_TABLE") else 'wikipedia'
 
 def saveFakerDf(dfrecords):
     if isinstance(CASSANDRA_HOST, list):
