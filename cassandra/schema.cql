@@ -18,7 +18,7 @@ CREATE TABLE fakerdata (
   name TEXT,
   gender TEXT,
   address TEXT,
-  year INT,
+  year TEXT,
   email TEXT,
   phone_number TEXT,
   job TEXT,

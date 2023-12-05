@@ -10,7 +10,7 @@ from cassandra.query import dict_factory
 
 weathertable = os.getenv("weather.table", "weatherreport")
 fakertable = os.getenv("faker.table", "fakerdata")
-binancetable = os.getenv("wikipedia.table", "wikipediadata")
+wikipediatable = os.getenv("wikipedia.table", "wikipediadata")
 
 
 CASSANDRA_HOST = os.environ.get("CASSANDRA_HOST") if os.environ.get("CASSANDRA_HOST") else 'localhost'
@@ -18,7 +18,7 @@ CASSANDRA_KEYSPACE = os.environ.get("CASSANDRA_KEYSPACE") if os.environ.get("CAS
 
 WEATHER_TABLE = os.environ.get("WEATHER_TABLE") if os.environ.get("WEATHER_TABLE") else 'weather'
 FAKER_TABLE = os.environ.get("FAKER_TABLE") if os.environ.get("FAKER_TABLE") else 'faker'
-BINANCE_TABLE = os.environ.get("WIKIPEDIA_TABLE") if os.environ.get("WIKIPEDIA_TABLE") else 'wikipedia'
+WIKIPEDIA_TABLE = os.environ.get("WIKIPEDIA_TABLE") if os.environ.get("WIKIPEDIA_TABLE") else 'wikipedia'
 
 def saveFakerDf(dfrecords):
     if isinstance(CASSANDRA_HOST, list):
@@ -92,7 +92,7 @@ def saveWeatherreport(dfrecords):
     print('Inserted ' + str(totalcount) + ' rows in total')
 
 
-def saveBinanceDf(dfrecords):
+def saveWikipediaDf(dfrecords):
     if isinstance(CASSANDRA_HOST, list):
         cluster = Cluster(CASSANDRA_HOST)
     else:
@@ -103,14 +103,14 @@ def saveBinanceDf(dfrecords):
     counter = 0
     totalcount = 0
 
-    cqlsentence = "INSERT INTO " + binancetable + " (datetime, pair, open_price, close_price, high_price, low_price, volume, trades) \
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+    cqlsentence = "INSERT INTO " + wikipediatable + " (id, type, title, timestamp, user, bot, length_old, length_new, revision_old, revision_new) \
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
     batch = BatchStatement(consistency_level=ConsistencyLevel.QUORUM)
     insert = session.prepare(cqlsentence)
     batches = []
     for idx, val in dfrecords.iterrows():
-        batch.add(insert, (val['datetime'], val['pair'], val['open_price'],
-                           val['close_price'], val['high_price'], val['low_price'], val['volume'], val['trades']))
+        batch.add(insert, (val['id'], val['type'], val['timestamp'],
+                           val['user'], val['bot'], val['length_old'], val['length_new'], val['revision_old'], val['revision_new']))
         counter += 1
         if counter >= 100:
             print('inserting ' + str(counter) + ' records')
@@ -136,24 +136,25 @@ def loadDF(targetfile, target):
     elif target == 'faker':
         colsnames = ["name", "gender", "address", "year", "email", "phone_number", "job", 
                     "company", "country", "city", "date_time", "credit_card_number"]
+        dfData['date_time'] = pd.to_datetime(dfData['date_time'])
         dfData = pd.read_csv(targetfile, header=None,
                              parse_dates=True, names=colsnames)
         saveFakerDf(dfData)
-    elif target == 'binance':
-        colsnames = ['datetime', 'pair', 'open_price', 'close_price',
-                     'high_price', 'low_price', 'volume', 'trades']
+    elif target == 'wikipedia':
+        colsnames = ['id', 'type', 'title', 'timestamp',
+                     'user', 'bot', 'length_old', 'length_new', 'revision_old', 'revision_new']
         dfData = pd.read_csv(targetfile, header=None,
                              parse_dates=True, names=colsnames)
-        dfData['datetime'] = pd.to_datetime(dfData['datetime'])
-        saveBinanceDf(dfData)
+        dfData['timestamp'] = pd.to_datetime(dfData['timestamp'])
+        saveWikipediaDf(dfData)
 
 
 def getWeatherDF():
     return getDF(WEATHER_TABLE)
 def getFakerDF():
     return getDF(FAKER_TABLE)
-def getBinanceDF():
-    return getDF(BINANCE_TABLE)
+def getWikipediaDF():   
+    return getDF(WIKIPEDIA_TABLE)
 
 def getDF(source_table):
     if isinstance(CASSANDRA_HOST, list):
@@ -161,7 +162,7 @@ def getDF(source_table):
     else:
         cluster = Cluster([CASSANDRA_HOST])
 
-    if source_table not in (WEATHER_TABLE, FAKER_TABLE, BINANCE_TABLE):
+    if source_table not in (WEATHER_TABLE, FAKER_TABLE, WIKIPEDIA_TABLE):
         return None
 
     session = cluster.connect(CASSANDRA_KEYSPACE)

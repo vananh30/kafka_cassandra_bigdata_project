@@ -6,4 +6,4 @@ jupyter
 cassandra-driver
 jupyterlab
 plotly
-sklearn
+scikit-learn
