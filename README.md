@@ -58,7 +58,8 @@ IMPORTANT: There is a bug that I don't know how to fix yet. You have to manually
 ## Starting Producers
 ```bash
 $ docker-compose -f owm-producer/docker-compose.yml up -d     # start the producer that retrieves open weather map
-$ docker-compose -f twitter-producer/docker-compose.yml up # start the producer for twitter
+$ docker-compose -f faker-producer/docker-compose.yml up -d # start the producer for twitter
+$ docker-compose -f wikipedia-producer/docker-compose.yml up -d # start the producer for twitter
 ```
 
 There is a known issue with reading the tweets and the bug fix will be releashed in Tweetpy 4.0 (details here: https://github.com/tweepy/tweepy/issues/237). Therefore, with the Twitter producer, we will attach the bash to monitor the log to see the magic and retry if the service is stopped. 
@@ -88,9 +89,11 @@ $ cqlsh --cqlversion=3.4.4 127.0.0.1 #make sure you use the correct cqlversion
 
 cqlsh> use kafkapipeline; #keyspace name
 
-cqlsh:kafkapipeline> select * from twitterdata;
-
 cqlsh:kafkapipeline> select * from weatherreport;
+
+cqlsh:kafkapipeline> select * from fakerdata;
+
+cqlsh:kafkapipeline> select * from wikipediadata ORDER BY timestamp DESC LIMIT 10;
 ```
 
 And that's it! you should be seeing records coming in to Cassandra. Feel free to play around with it by bringing down containers and then up again to see the magic of fault tolerance!
