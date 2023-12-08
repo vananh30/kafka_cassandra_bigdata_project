@@ -1,30 +1,22 @@
 # How to Build a Distributed Big Data Pipeline Using Kafka, Cassandra, and Jupyter Lab with Docker
 
-You can use the resources in this github to deploy an end-to-end data pipeline on your local computer using Docker containerized Kafka (data streaming), Cassandra (NoSQL database) and Jupyter Lab (data analysis visualization).
+## Introduction
 
-This bases on the repo https://github.com/salcaino/sfucmpt733/tree/main/foobar-kafka
-Substantial changes and bug fixes have been made. Tested on Windows 10. 
-
+This project demonstrates how to build a distributed big data pipeline using Kafka, Cassandra, and Jupyter Lab with Docker. The pipeline processes data from three distinct sources: the OpenWeatherMap API, a custom Faker API with 10 fields, and the Wikipedia Recent Change API. By combining these diverse data streams, you can gain insights into real-time weather information, generate synthetic data, and monitor recent changes on Wikipedia.
 
 ## Tutorial videos
 
-https://youtu.be/_lJWsgOoOjM
-
-https://youtu.be/TSJ_9ykhU1g
-
-https://youtu.be/qQ7krtlZ7As
 
 
-# Quickstart instructions
+## Data Sources
 
 You need to apply for some APIs to use with this. The APIs might take days for application to be granted access. Sample API keys are given, but it can be blocked if too many users are running this.
 
-Twitter Developer API: https://developer.twitter.com/en/apply-for-access
-
 OpenWeatherMap API: https://openweathermap.org/api 
 
-After obtaining the API keys, please update the files  "twitter-producer/twitter_service.cfg" and "owm-producer/openweathermap_service.cfg" accordingly.
+After obtaining the API keys, please update the files  "owm-producer/openweathermap_service.cfg" accordingly.
 
+## Setting Up the Project
 
 #Create docker networks
 ```bash
@@ -62,14 +54,12 @@ $ docker-compose -f faker-producer/docker-compose.yml up -d # start the producer
 $ docker-compose -f wikipedia-producer/docker-compose.yml up -d # start the producer for twitter
 ```
 
-There is a known issue with reading the tweets and the bug fix will be releashed in Tweetpy 4.0 (details here: https://github.com/tweepy/tweepy/issues/237). Therefore, with the Twitter producer, we will attach the bash to monitor the log to see the magic and retry if the service is stopped. 
-
-## Starting Twitter classifier (plus Weather consumer)
+## Starting Consumer classifier (plus Weather consumer)
 
 There is another catch: We cannot build the Docker file for the consumer directly with the docker-compose.yml (We can do so with all other yml files, just not this one -.-). So we have to manually go inside the folder "consumers" to build the Docker using command:
 
 ```bash
-$ docker build -t twitterconsumer .        # start the consumers
+$ docker build -t consumer .        # start the consumers
 ```
 
 Then go back up 1 level with "cd .." and we can start consumers:
@@ -83,7 +73,7 @@ First login into Cassandra's container with the following command or open a new 
 ```bash
 $ docker exec -it cassandra bash
 ```
-Once loged in, bring up cqlsh with this command and query twitterdata and weatherreport tables like this:
+Once loged in, bring up cqlsh with this command and query fakerdata, wikipediadata and weatherreport tables like this:
 ```bash
 $ cqlsh --cqlversion=3.4.4 127.0.0.1 #make sure you use the correct cqlversion
 
@@ -93,7 +83,7 @@ cqlsh:kafkapipeline> select * from weatherreport;
 
 cqlsh:kafkapipeline> select * from fakerdata;
 
-cqlsh:kafkapipeline> select * from wikipediadata ORDER BY timestamp DESC LIMIT 10;
+cqlsh:kafkapipeline> select * from wikipediadata;
 ```
 
 And that's it! you should be seeing records coming in to Cassandra. Feel free to play around with it by bringing down containers and then up again to see the magic of fault tolerance!
@@ -118,7 +108,9 @@ $ docker-compose -f consumers/docker-compose.yml down          # stop the consum
 
 $ docker-compose -f owm-producer/docker-compose.yml down       # stop open weather map producer
 
-$ docker-compose -f twitter-producer/docker-compose.yml down   # stop twitter producer
+$ docker-compose -f faker-producer/docker-compose.yml down   # stop faker producer
+
+$ docker-compose -f wikipedia-producer/docker-compose.yml down   # stop wikipedia producer
 
 $ docker-compose -f kafka/docker-compose.yml down              # stop zookeeper, broker, kafka-manager and kafka-connect services
 
