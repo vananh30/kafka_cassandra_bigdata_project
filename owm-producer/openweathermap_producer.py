@@ -31,7 +31,7 @@ async def get_weather(city):
 
 
 def run():
-    locations = ["Thanh pho Ho Chi Minh, VN","Canberra, AU","Singapore, SG"]
+    locations = ["Thanh pho Ho Chi Minh, VN","Canberra, AU", "Sydney, AU","Singapore, SG"]
     iterator = 0
     repeat_request = SLEEP_TIME / len(locations)
     print("Setting up Weather producer at {}".format(KAFKA_BROKER_URL))
