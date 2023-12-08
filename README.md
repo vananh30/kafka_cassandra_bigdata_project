@@ -63,9 +63,27 @@ You need to apply for some APIs to use with this. The APIs might take days for a
   "cod": 200
 }
 ```
+### 2. Faker API
 
+- **Description:** This custom API is designed using the Faker library to generate synthetic data with 10 fields. Faker is a Python library that allows you to create realistic-looking fake data for testing and development purposes. The fields can include names, addresses, dates, and more, providing a diverse set of information for testing and analysis.
 
-
+#### Sample JSON
+```
+{
+  "name": "John Doe",
+  "gender": "Male",
+  "address": "123 Main St, Cityville, State, 12345",
+  "year": 1990,
+  "email": "john.doe@example.com",
+  "phone_number": "+1234567890",
+  "job": "Software Engineer",
+  "company": "Tech Solutions Inc.",
+  "country": "United States",
+  "city": "Cityville",
+  "date_time": "2023-12-08 15:30:00",
+  "credit_card_number": "1234-5678-9012-3456"
+}
+```
 ### 3. Wikipedia Recent Change API
 
 - **Link:** [Wikimedia Data Stream Recentchange](https://stream.wikimedia.org//v2/stream/recentchange)
