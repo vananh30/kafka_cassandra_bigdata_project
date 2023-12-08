@@ -10,13 +10,108 @@ This project demonstrates how to build a distributed big data pipeline using Kaf
 
 ## Data Sources
 
+### 1. OpenWeatherMap API
+
+- **Link:** [OpenWeatherMap API](https://openweathermap.org/api)
+- After obtaining the API keys, please update the files  "owm-producer/openweathermap_service.cfg" accordingly.
+- **Description:** OpenWeatherMap provides a powerful and comprehensive weather API, offering real-time weather data for any location worldwide. The API includes information such as current weather conditions, forecasts, and historical data.
 You need to apply for some APIs to use with this. The APIs might take days for application to be granted access. Sample API keys are given, but it can be blocked if too many users are running this.
+#### Sample JSON
+```
+{
+  "coord": {
+    "lon": -73.9352,
+    "lat": 40.7306
+  },
+  "weather": [
+    {
+      "id": 800,
+      "main": "Clear",
+      "description": "clear sky",
+      "icon": "01n"
+    }
+  ],
+  "base": "stations",
+  "main": {
+    "temp": 23.45,
+    "feels_like": 16.78,
+    "temp_min": 22.05,
+    "temp_max": 24.86,
+    "pressure": 1020,
+    "humidity": 31
+  },
+  "visibility": 10000,
+  "wind": {
+    "speed": 2.68,
+    "deg": 218,
+    "gust": 2.83
+  },
+  "clouds": {
+    "all": 0
+  },
+  "dt": 1640750154,
+  "sys": {
+    "type": 2,
+    "id": 2038214,
+    "country": "US",
+    "sunrise": 1640693773,
+    "sunset": 1640730054
+  },
+  "timezone": -18000,
+  "id": 5128581,
+  "name": "New York",
+  "cod": 200
+}
+```
 
-OpenWeatherMap API: https://openweathermap.org/api 
 
-After obtaining the API keys, please update the files  "owm-producer/openweathermap_service.cfg" accordingly.
 
-## Setting Up the Project
+### 3. Wikipedia Recent Change API
+
+- **Link:** [Wikimedia Data Stream Recentchange](https://stream.wikimedia.org//v2/stream/recentchange)
+- **Description:** The Wikimedia Data Stream Recentchange API provides real-time updates on the latest changes made to Wikipedia articles. The API includes essential information such as title, URL, language domain, timestamp, user name, user comment (reason for change), user is bot (here called "bot"), bot type (located user; not a new field!), type (edit, categorize, etc., unique to the endpoint), length (article length: old and new, unique to the endpoint), minor change (if it is a minor change).
+
+#### Sample JSON
+
+```json
+"$schema":"/mediawiki/recentchange/1.0.0",
+   "meta":{
+      "uri":"https://commons.wikimedia.org/wiki/File:DESERT_SCIMITAR_130430-M-OC922-009.jpg",
+      "request_id":"1b12bec3-c72e-4451-ae23-bc5742c51343",
+      "id":"e195ebcf-e9ff-4179-9591-0d2384b96117",
+      "dt":"2021-08-27T13:20:18Z",
+      "domain":"commons.wikimedia.org",
+      "stream":"mediawiki.recentchange",
+      "topic":"codfw.mediawiki.recentchange",
+      "partition":0,
+      "offset":441362978
+   },
+   "id":1754327016,
+   "type":"edit",
+   "namespace":6,
+   "title":"File:DESERT SCIMITAR 130430-M-OC922-009.jpg",
+   "comment":"add location United States inside Taken On on template",
+   "timestamp":1630070418,
+   "user":"RudolphousBot",
+   "bot":true,
+   "minor":true,
+   "patrolled":true,
+   "length":{
+      "old":1132,
+      "new":1155
+   },
+   "revision":{
+      "old":585514253,
+      "new":586543834
+   },
+   "server_url":"https://commons.wikimedia.org",
+   "server_name":"commons.wikimedia.org",
+   "server_script_path":"/w",
+   "wiki":"commonswiki",
+   "parsedcomment":"add location United States inside Taken On on template"
+```
+
+# Setting Up the Project
 
 #Create docker networks
 ```bash
