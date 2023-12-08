@@ -4,6 +4,9 @@
 
 This project demonstrates how to build a distributed big data pipeline using Kafka, Cassandra, and Jupyter Lab with Docker. The pipeline processes data from three distinct sources: the OpenWeatherMap API, a custom Faker API with 10 fields, and the Wikipedia Recent Change API. By combining these diverse data streams, you can gain insights into real-time weather information, generate synthetic data, and monitor recent changes on Wikipedia.
 
+![Project Structure](./kafka-cassandra-bigdata.drawio.png)
+
+
 ## Tutorial videos
 
 
